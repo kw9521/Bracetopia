@@ -6,33 +6,46 @@
 #include "initializingGrid.h"
 
 void fisherYatesShuffle(char *flattenedGrid, int lengthOfFlattenedGrid) {
-    for (int i = lengthOfFlattenedGrid - 1; i > 0; i--) {
-        int j = random() % (i + 1);
+    for (int i = 0; i <= lengthOfFlattenedGrid - 2; i++) {
+        int j = i + (random() % (lengthOfFlattenedGrid - i));
 
-        // Swap elements at positions i and j
+        // Swap elements at index i and index j
         char temp = flattenedGrid[i];
         flattenedGrid[i] = flattenedGrid[j];
         flattenedGrid[j] = temp;
     }
 }
 
+int calcNumOfVacCells(int totalNumOfCells, int vacancyRate ){
+    int numOfVacancy = (int)(totalNumOfCells * ((float)vacancyRate/100));              // truncates 
+    return numOfVacancy;
+}
+
+int calcNumOfEndlines(int totalNumOfCells, int endlinePercentage){
+    int numOfEndlines = (int)(totalNumOfCells * ((float)endlinePercentage/100));       // truncates 
+    return numOfEndlines;
+}
+
 void makeGrid(int dimensionOfGrid, char initialGrid[][dimensionOfGrid], int vacancyRate, int endlinePercentage) {
     
     // shuffling method
     int numOfCells = dimensionOfGrid * dimensionOfGrid;
-    int numOfVacancy = (int)(numOfCells * ((float)vacancyRate/100));              // truncates 
+    int numOfVacancy = calcNumOfVacCells(dimensionOfGrid, vacancyRate);
     int numOfCellsAfterVac = numOfCells - numOfVacancy; 
-    int numOfEndlines = (int)(numOfCellsAfterVac * ((float)endlinePercentage/100));       // truncates 
+    int numOfEndlines = calcNumOfEndlines(numOfCellsAfterVac, endlinePercentage);       // truncates 
 
-    int lengthOfFlattenedGrid = dimensionOfGrid*dimensionOfGrid;
+    // length of the 1D array is the same as total # of cells in 2D array
+    int lengthOfFlattenedGrid = numOfCells;
     char flattenedGrid[lengthOfFlattenedGrid];
     
     int currIndex = 0;
+    // set everything to be 'n' cells first
     for (int i = 0; i < (lengthOfFlattenedGrid); i++){
         flattenedGrid[i] = 'n';
     }
 
     int x = numOfVacancy;
+    // change the first x amount to be '.' cells
     for (int i = 0; i < (lengthOfFlattenedGrid) && x > 0; i++){
         flattenedGrid[i] = '.';
         x--;
@@ -40,6 +53,7 @@ void makeGrid(int dimensionOfGrid, char initialGrid[][dimensionOfGrid], int vaca
     }
 
     int y = numOfEndlines;
+    // change the next y amount to be 'e' cells
     for (int i = currIndex; i < (lengthOfFlattenedGrid) && y > 0; i++){
         flattenedGrid[i] = 'e';
         y--;
