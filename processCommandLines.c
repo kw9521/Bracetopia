@@ -1,4 +1,7 @@
 #define _DEFAULT_SOURCE
+#include <stdlib.h>         // to use EXIT_FAILURE
+#include <stdio.h>          // to use stderr
+
 #include "processCommandLines.h"
 
 // prints out a help message, no need to check for validity 
@@ -43,8 +46,6 @@ void setNumOfPrintCycles(int *numOfPrintOnCycles, int number) {
         // TBD TBD TBD: TURN ON PRINT MODE HERE
     }
 }
-
-
 
 /// -s S: set strength threshold.
 /// Specifies an override (S) to the default strength threshold as a percentage expressed as an integer. 

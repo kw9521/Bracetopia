@@ -1,5 +1,5 @@
 #
-# Created by gmakemake (Ubuntu Jul 25 2014) on Sun Oct 22 00:56:48 2023
+# Created by gmakemake (Ubuntu Jul 25 2014) on Mon Oct 23 14:08:18 2023
 #
 
 #
@@ -51,19 +51,22 @@ CLIBFLAGS =	-lm  -lcurses
 
 
 CPP_FILES =	
-C_FILES =	use_getopt.c
+C_FILES =	bracetopia.c initializingGrid.c processCommandLines.c use_getopt.c
 PS_FILES =	
 S_FILES =	
-H_FILES =	
+H_FILES =	initializingGrid.h processCommandLines.h
 SOURCEFILES =	$(H_FILES) $(CPP_FILES) $(C_FILES) $(S_FILES)
 .PRECIOUS:	$(SOURCEFILES)
-OBJFILES =	
+OBJFILES =	initializingGrid.o processCommandLines.o 
 
 #
 # Main targets
 #
 
-all:	use_getopt 
+all:	bracetopia use_getopt 
+
+bracetopia:	bracetopia.o $(OBJFILES)
+	$(CC) $(CFLAGS) -o bracetopia bracetopia.o $(OBJFILES) $(CLIBFLAGS)
 
 use_getopt:	use_getopt.o $(OBJFILES)
 	$(CC) $(CFLAGS) -o use_getopt use_getopt.o $(OBJFILES) $(CLIBFLAGS)
@@ -72,6 +75,9 @@ use_getopt:	use_getopt.o $(OBJFILES)
 # Dependencies
 #
 
+bracetopia.o:	initializingGrid.h processCommandLines.h
+initializingGrid.o:	initializingGrid.h
+processCommandLines.o:	processCommandLines.h
 use_getopt.o:	
 
 #
@@ -84,7 +90,7 @@ archive.tgz:	$(SOURCEFILES) Makefile
 	tar cf - $(SOURCEFILES) Makefile | gzip > archive.tgz
 
 clean:
-	-/bin/rm -f $(OBJFILES) use_getopt.o core
+	-/bin/rm -f $(OBJFILES) bracetopia.o use_getopt.o core
 
 realclean:        clean
-	-/bin/rm -f use_getopt 
+	-/bin/rm -f bracetopia use_getopt 
