@@ -30,7 +30,7 @@ void makeGrid(int dimensionOfGrid, char initialGrid[][dimensionOfGrid], int vaca
     
     // shuffling method
     int numOfCells = dimensionOfGrid * dimensionOfGrid;
-    int numOfVacancy = calcNumOfVacCells(dimensionOfGrid, vacancyRate);
+    int numOfVacancy = calcNumOfVacCells(numOfCells, vacancyRate);
     int numOfCellsAfterVac = numOfCells - numOfVacancy; 
     int numOfEndlines = calcNumOfEndlines(numOfCellsAfterVac, endlinePercentage);       // truncates 
 

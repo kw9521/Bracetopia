@@ -1,5 +1,5 @@
 #
-# Created by gmakemake (Ubuntu Jul 25 2014) on Mon Oct 23 14:08:18 2023
+# Created by gmakemake (Ubuntu Jul 25 2014) on Mon Oct 23 20:15:17 2023
 #
 
 #
@@ -51,13 +51,13 @@ CLIBFLAGS =	-lm  -lcurses
 
 
 CPP_FILES =	
-C_FILES =	bracetopia.c initializingGrid.c processCommandLines.c use_getopt.c
+C_FILES =	bracetopia.c happyMeasure.c initializingGrid.c processCommandLines.c use_getopt.c
 PS_FILES =	
 S_FILES =	
-H_FILES =	initializingGrid.h processCommandLines.h
+H_FILES =	happyMeasure.h initializingGrid.h processCommandLines.h
 SOURCEFILES =	$(H_FILES) $(CPP_FILES) $(C_FILES) $(S_FILES)
 .PRECIOUS:	$(SOURCEFILES)
-OBJFILES =	initializingGrid.o processCommandLines.o 
+OBJFILES =	happyMeasure.o initializingGrid.o processCommandLines.o 
 
 #
 # Main targets
@@ -75,7 +75,8 @@ use_getopt:	use_getopt.o $(OBJFILES)
 # Dependencies
 #
 
-bracetopia.o:	initializingGrid.h processCommandLines.h
+bracetopia.o:	happyMeasure.h initializingGrid.h processCommandLines.h
+happyMeasure.o:	happyMeasure.h
 initializingGrid.o:	initializingGrid.h
 processCommandLines.o:	processCommandLines.h
 use_getopt.o:	

@@ -10,6 +10,7 @@
 
 #include "processCommandLines.h"
 #include "initializingGrid.h"
+#include "happyMeasure.h"
 
 int main( int argc, char * argv[] ) {
 
@@ -89,6 +90,16 @@ int main( int argc, char * argv[] ) {
     char initialGrid[dimensionOfGrid][dimensionOfGrid];
     makeGrid(dimensionOfGrid, initialGrid, vacancyRate, endlinePercentage);
     
+    // keeping track of how many cells were occupied
+    int totalCells = dimensionOfGrid*dimensionOfGrid;
+    // 100 total cells, 20% of that is vac = 20 vac cells
+    int numOfVacCells = calcNumOfVacCells(totalCells, vacancyRate); 
+    // Of the rest 80 cells, 60% are endline cells = 80 * 0.6 = 48 'e' cells
+    int numOfEndlineCells = calcNumOfEndlines((totalCells - numOfVacCells), endlinePercentage);
+    // rest are 'n' cells
+    int numOfNewlineCells = totalCells - numOfVacCells - numOfEndlineCells;
+
+
     // testing, printing the initialGrid out
     printf("\nshuffled grid: \n");
     for (int i = 0; i < dimensionOfGrid; i++) {
@@ -98,7 +109,13 @@ int main( int argc, char * argv[] ) {
         printf("\n");
     }
 
-
+    // calculating everyones' happiness
+    int totalOccupiedCells = numOfEndlineCells+numOfNewlineCells;
+    float avgHappiness = overallHappy(totalOccupiedCells, dimensionOfGrid, initialGrid);
     
+    printf("\noverall \"happiness\": %0.4f\n", avgHappiness);
+
+
+
 
 }
