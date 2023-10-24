@@ -91,6 +91,10 @@ float currCellHappiness;
         }
     }
 
+    if(totalNeighbors == 0){
+        currCellHappiness = 1.0;
+        return currCellHappiness;
+    }
     currCellHappiness = (float)happy/totalNeighbors;
     return currCellHappiness;
 }
