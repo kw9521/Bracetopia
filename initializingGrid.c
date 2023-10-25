@@ -4,6 +4,7 @@
 #include <time.h>               // to use time()
 #include <stdio.h>              // to use printf()
 #include "initializingGrid.h"
+#include "supportFuncs.h"       // to use turn1DInto2D()
 
 void fisherYatesShuffle(char *flattenedGrid, int lengthOfFlattenedGrid) {
     for (int i = 0; i <= lengthOfFlattenedGrid - 2; i++) {
@@ -75,16 +76,11 @@ void makeGrid(int dimensionOfGrid, char initialGrid[][dimensionOfGrid], int vaca
 
 
 
-
     // Shuffle the flatArray using Fisher-Yates shuffle
     fisherYatesShuffle(flattenedGrid, lengthOfFlattenedGrid);
 
     // Reconstruct the 2D array with the shuffled elements
-    for (int i = 0; i < dimensionOfGrid; i++) {
-        for (int j = 0; j < dimensionOfGrid; j++) {
-            initialGrid[i][j] = flattenedGrid[i * dimensionOfGrid + j];
-        }
-    }
+    turn1DInto2D(dimensionOfGrid, initialGrid, lengthOfFlattenedGrid, flattenedGrid);
 
 }
 

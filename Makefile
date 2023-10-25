@@ -1,5 +1,5 @@
 #
-# Created by gmakemake (Ubuntu Jul 25 2014) on Mon Oct 23 20:15:17 2023
+# Created by gmakemake (Ubuntu Jul 25 2014) on Wed Oct 25 13:24:20 2023
 #
 
 #
@@ -51,13 +51,13 @@ CLIBFLAGS =	-lm  -lcurses
 
 
 CPP_FILES =	
-C_FILES =	bracetopia.c happyMeasure.c initializingGrid.c processCommandLines.c use_getopt.c
+C_FILES =	bracetopia.c happyMeasure.c initializingGrid.c moves.c processCommandLines.c supportFuncs.c use_getopt.c
 PS_FILES =	
 S_FILES =	
-H_FILES =	happyMeasure.h initializingGrid.h processCommandLines.h
+H_FILES =	happyMeasure.h initializingGrid.h moves.h processCommandLines.h supportFuncs.h
 SOURCEFILES =	$(H_FILES) $(CPP_FILES) $(C_FILES) $(S_FILES)
 .PRECIOUS:	$(SOURCEFILES)
-OBJFILES =	happyMeasure.o initializingGrid.o processCommandLines.o 
+OBJFILES =	happyMeasure.o initializingGrid.o moves.o processCommandLines.o supportFuncs.o 
 
 #
 # Main targets
@@ -75,10 +75,12 @@ use_getopt:	use_getopt.o $(OBJFILES)
 # Dependencies
 #
 
-bracetopia.o:	happyMeasure.h initializingGrid.h processCommandLines.h
+bracetopia.o:	happyMeasure.h initializingGrid.h moves.h processCommandLines.h supportFuncs.h
 happyMeasure.o:	happyMeasure.h
-initializingGrid.o:	initializingGrid.h
+initializingGrid.o:	initializingGrid.h supportFuncs.h
+moves.o:	happyMeasure.h
 processCommandLines.o:	processCommandLines.h
+supportFuncs.o:	supportFuncs.h
 use_getopt.o:	
 
 #

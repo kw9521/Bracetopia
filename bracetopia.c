@@ -11,6 +11,8 @@
 #include "processCommandLines.h"
 #include "initializingGrid.h"
 #include "happyMeasure.h"
+#include "supportFuncs.h"
+#include "moves.h"
 
 int main( int argc, char * argv[] ) {
 
@@ -102,12 +104,7 @@ int main( int argc, char * argv[] ) {
 
     // testing, printing the initialGrid out
     printf("\nshuffled grid: \n");
-    for (int i = 0; i < dimensionOfGrid; i++) {
-        for (int j = 0; j < dimensionOfGrid; j++) {
-            printf("%c", initialGrid[i][j]);
-        }
-        printf("\n");
-    }
+    printOutCurrGrid(dimensionOfGrid, initialGrid);
 
     // calculating everyones' happiness
     int totalOccupiedCells = numOfEndlineCells+numOfNewlineCells;
@@ -115,7 +112,8 @@ int main( int argc, char * argv[] ) {
     
     printf("\noverall \"happiness\": %0.4f\n", avgHappiness);
 
-
+    
+    
 
 
 }
