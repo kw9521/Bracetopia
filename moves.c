@@ -1,13 +1,9 @@
 #define _DEFAULT_SOURCE
-#include "happyMeasure.h"
+#include <stdio.h>      // allows for use of printf()
 
-void copy2DArray(int dimensionOfGrid, int source[][dimensionOfGrid], int dest[][dimensionOfGrid]) {
-    for (int i = 0; i < dimensionOfGrid; i++) {
-        for (int j = 0; j < dimensionOfGrid; j++) {
-            dest[i][j] = source[i][j];
-        }
-    }
-}
+#include "moves.h"
+#include "happyMeasure.h"       // Use measureHappyOfCurrCell() and overallHappy()
+#include "supportFuncs.h"       // use printOutCurrGrid()
 
 void flatten2DArr(int dimensionOfGrid, char source2DArr[][dimensionOfGrid], char flattened1DArr[]){
     for (int i = 0; i < dimensionOfGrid; i++) {
@@ -89,7 +85,41 @@ void movingAgents(int movesThisCycle, int dimensionOfGrid, char currGrid[][dimen
 
 }
 
+void printOutGridNData(int dimensionOfGrid, char currGrid[][dimensionOfGrid], int movesThisCycle, float overallHappiness, int strengthThreshold, int vacancyRate, int endlinePercentage, int numOfCycles){
+
+    // print out curr grid
+    printOutCurrGrid(dimensionOfGrid, currGrid);
+
+    printf("cycle: %d\n", numOfCycles);
+    printf("moves this cycle: %d\n", movesThisCycle);
+    printf("overall \"happiness\": %0.4f\n", overallHappiness);
+    printf("dim: %d, threshold: %d%%, vacancy: %d%%, endlines: %d%%", dimensionOfGrid, strengthThreshold, vacancyRate, endlinePercentage);
+
+}
+
+// func that main will call
+// calls movingAgents to calculate moving and etc
+// calls printOutGridNData to print out the visual 
+void moveXNumOfTimes(int totalOccupiedCells, int numOfPrintOnCycles, int dimensionOfGrid, char initialGrid[][dimensionOfGrid], int numOfVacCells, int vacancyRate, int endlinePercentage, int strengthThreshold ){
+    int numOfCyclesDone = 0;
+    
+    // print out INITIAL UNCHANGED CYCLE 0 grid
+    if(numOfCyclesDone == 0){
+        float overallHappyness = overallHappy(totalOccupiedCells, dimensionOfGrid, initialGrid);
+        printOutGridNData(dimensionOfGrid, initialGrid, 0, overallHappyness, strengthThreshold, vacancyRate, endlinePercentage, 0);
+        numOfCyclesDone++;
+    }
+
+    // prints out the cycles AFTER initial 
+    for (int i = 0; i < numOfPrintOnCycles; i++) {
+        int movesThisCycle = 0; 
+        movingAgents(movesThisCycle, dimensionOfGrid, initialGrid, numOfVacCells, strengthThreshold);
+        
+        float overallHappyness = overallHappy(totalOccupiedCells, dimensionOfGrid, initialGrid);
+        printOutGridNData(dimensionOfGrid, initialGrid, movesThisCycle, overallHappyness, strengthThreshold, vacancyRate, endlinePercentage, numOfCyclesDone);
+        numOfCyclesDone++;
+    }
+    
 
 
-
-
+}

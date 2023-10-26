@@ -22,7 +22,7 @@ int main( int argc, char * argv[] ) {
         return 1; 
     }
 
-    srandom(41);
+
     int dimensionOfGrid = 15;
     int strengthThreshold = 50;
     int vacancyRate = 20;
@@ -37,7 +37,7 @@ int main( int argc, char * argv[] ) {
     while((letter = getopt(argc, argv, "hd:s:v:e:c:t")) != -1){
         int value;
         if(optarg){
-            value = (int) strtol(optarg, &ptr, 10);
+            value = (int)strtol(optarg, &ptr, 10);
         }
 
         switch(letter){
@@ -54,7 +54,7 @@ int main( int argc, char * argv[] ) {
                 break;
             case('c'):          // set the cycle count amd turns on print mode
                 if(optarg){
-                    setNumOfPrintCycles(&numOfPrintOnCycles ,value);
+                    setNumOfPrintCycles(&numOfPrintOnCycles, value);
                     // infiniteMode = false; 
                 }
                 break;
@@ -113,7 +113,11 @@ int main( int argc, char * argv[] ) {
     printf("\noverall \"happiness\": %0.4f\n", avgHappiness);
 
     
-    
+    // call func that moves numOfPrintOnCycles number of times
+    // inside that func, compute the data and call another supp func that prints everything else
 
+
+
+    
 
 }

@@ -1,5 +1,6 @@
 #define _DEFAULT_SOURCE
 
+#include <stdio.h>      // allows for use of printf()
 #include "happyMeasure.h"
 
 /// meaures the happiness of current cell by checking the preference of the neighbors around it 
@@ -14,88 +15,68 @@ float measureHappyOfCurrCell(char currCellPreference, int row, int col, int dime
     float currCellHappiness;
 
     int happy = 0;
-    int unhappy = 0;
     int totalNeighbors = 0;
     char currPref = currCellPreference;
 
+    // if curr cell is '.', we dont need to calculate its happiness 
+    if(currPref == '.'){ 
+        return 0.0;
+    }
+
     // top left corner
     if((row-1 >= 0) && (col-1 >= 0)){
-        if(initialGrid[row-1][col-1] == currPref){
-            happy++;
-            totalNeighbors++;
-        } else{
-            unhappy++;
-        }
+        if(initialGrid[row-1][col-1] == currPref){ happy++; totalNeighbors++; } 
+        else if (initialGrid[row-1][col-1] == '.'){ ; } 
+        else { totalNeighbors++;} 
     }
-    
+
     // top middle
     if((col-1 >= 0)){
-        if(initialGrid[row][col-1] == currPref){
-            happy++;
-            totalNeighbors++;
-        } else{
-            unhappy++;
-        }
+        if(initialGrid[row][col-1] == currPref){ happy++; totalNeighbors++; } 
+        else if (initialGrid[row][col-1] == '.'){ ; } 
+        else { totalNeighbors++;}
     }
 
     // top right
     if((row+1 < dimensionOfGrid) && (col-1 >= 0)){
-        if(initialGrid[row+1][col-1] == currPref){
-            happy++;
-            totalNeighbors++;
-        } else{
-            unhappy++;
-        }
+        if(initialGrid[row+1][col-1] == currPref){ happy++; totalNeighbors++; } 
+        else if (initialGrid[row+1][col-1] == '.'){ ; } 
+        else { totalNeighbors++; }
     }
 
     // middle left
     if((row-1 >= 0)){
-        if(initialGrid[row-1][col] == currPref){
-            happy++;
-            totalNeighbors++;
-        } else{
-            unhappy++;
-        }
+        if(initialGrid[row-1][col] == currPref){ happy++; totalNeighbors++; } 
+        else if (initialGrid[row-1][col] == '.'){ ; } 
+        else{ totalNeighbors++; }
     }
 
     // middle right
     if((row+1 < dimensionOfGrid)){
-        if(initialGrid[row+1][col] == currPref){
-            happy++;
-            totalNeighbors++;
-        } else{
-            unhappy++;
-        }
+        if(initialGrid[row+1][col] == currPref){ happy++; totalNeighbors++; } 
+        else if (initialGrid[row+1 ][col] == '.'){ ; } 
+        else{ totalNeighbors++; }
     }
 
     // bottom left
     if((row-1 >= 0) && (col+1 < dimensionOfGrid)){
-        if(initialGrid[row-1][col+1] == currPref){
-            happy++;
-            totalNeighbors++;
-        } else{
-            unhappy++;
-        }
+        if(initialGrid[row-1][col+1] == currPref){ happy++; totalNeighbors++;} 
+        else if (initialGrid[row-1][col+1] == '.'){ ; } 
+        else{ totalNeighbors++; }
     }
 
     // bottom middle
     if((col+1 < dimensionOfGrid)){
-        if(initialGrid[row][col+1] == currPref){
-            happy++;
-            totalNeighbors++;
-        } else{
-            unhappy++;
-        }
+        if(initialGrid[row][col+1] == currPref){ happy++; totalNeighbors++; } 
+        else if (initialGrid[row][col+1] == '.'){ ; } 
+        else{ totalNeighbors++; }
     }
 
     // bottom right
     if((row+1 < dimensionOfGrid) && (col+1 < dimensionOfGrid)){
-        if(initialGrid[row+1][col+1] == currPref){
-            happy++;
-            totalNeighbors++;
-        } else{
-            unhappy++;
-        }
+        if(initialGrid[row+1][col+1] == currPref){ happy++; totalNeighbors++;} 
+        else if (initialGrid[row+1][col+1] == '.'){ ; } 
+        else{ totalNeighbors++; }
     }
 
     // if there are no neighbors around curr cell, the cell is automatically happy 
@@ -115,33 +96,25 @@ float measureHappyOfCurrCell(char currCellPreference, int row, int col, int dime
 /// @param initialGrid the grid we are wroking with 
 /// @return the avg happiness of the grid passed in
 float overallHappy(int occupiedCells, int dimensionOfGrid, char initialGrid[][dimensionOfGrid]){
-
-    // to keep track of every occupied cell's happiess so far
-    float happyArray[occupiedCells];
+    float everyonesTotalHappiness = 0.0;
 
     for (int i = 0; i < dimensionOfGrid; i++) {
         for (int j = 0; j < dimensionOfGrid; j++) {
             
             // initialGrid[i][j] = 'e';
             char currCellPreference = initialGrid[i][j];
+            printf("%c", initialGrid[i][j]);
             
-            // checks if curren cell is a 'e' or a 'n'
-            if (currCellPreference == '.'){
-                break;
+            // checks if curren cell is a 'e' or a 'n', if not then skips
+            if (currCellPreference == '.'){ ;
             } else {
-                happyArray[i * dimensionOfGrid + j] = measureHappyOfCurrCell(currCellPreference, i, j, dimensionOfGrid, initialGrid);
+                everyonesTotalHappiness += measureHappyOfCurrCell(currCellPreference, i, j, dimensionOfGrid, initialGrid);
             }
         }
-    }
-
-    float everyonesTotalHappiness;
-    
-    // sums up every cell's happiness
-    for (int i = 0; i< occupiedCells; i++){
-        everyonesTotalHappiness += happyArray[i];
     }
 
     // averages their happiness 
     float avgHappiness = everyonesTotalHappiness/occupiedCells;
     return avgHappiness;
 }
+

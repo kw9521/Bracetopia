@@ -4,7 +4,6 @@
 #include <time.h>               // to use time()
 #include <stdio.h>              // to use printf()
 #include "initializingGrid.h"
-#include "supportFuncs.h"       // to use turn1DInto2D()
 
 void fisherYatesShuffle(char *flattenedGrid, int lengthOfFlattenedGrid) {
     for (int i = 0; i <= lengthOfFlattenedGrid - 2; i++) {
@@ -36,7 +35,7 @@ void makeGrid(int dimensionOfGrid, char initialGrid[][dimensionOfGrid], int vaca
     int numOfEndlines = calcNumOfEndlines(numOfCellsAfterVac, endlinePercentage);       // truncates 
 
     // length of the 1D array is the same as total # of cells in 2D array
-    int lengthOfFlattenedGrid = numOfCells;
+    int lengthOfFlattenedGrid = dimensionOfGrid * dimensionOfGrid;
     char flattenedGrid[lengthOfFlattenedGrid];
     
     int currIndex = 0;
@@ -62,9 +61,7 @@ void makeGrid(int dimensionOfGrid, char initialGrid[][dimensionOfGrid], int vaca
     }
 
     // Seed the random number generator
-    srand(time(NULL));
-
-
+    srandom(41);
 
     // testing, print flattenedgrid PRESHUFFLED
     for(int i = 0; i < lengthOfFlattenedGrid; i++){
@@ -80,7 +77,11 @@ void makeGrid(int dimensionOfGrid, char initialGrid[][dimensionOfGrid], int vaca
     fisherYatesShuffle(flattenedGrid, lengthOfFlattenedGrid);
 
     // Reconstruct the 2D array with the shuffled elements
-    turn1DInto2D(dimensionOfGrid, initialGrid, lengthOfFlattenedGrid, flattenedGrid);
+    for (int i = 0; i < dimensionOfGrid; i++) {
+        for (int j = 0; j < dimensionOfGrid; j++) {
+            initialGrid[i][j] = flattenedGrid[i * dimensionOfGrid + j];
+        }
+    }
 
 }
 

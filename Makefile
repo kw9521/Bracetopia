@@ -1,5 +1,5 @@
 #
-# Created by gmakemake (Ubuntu Jul 25 2014) on Wed Oct 25 13:24:20 2023
+# Created by gmakemake (Ubuntu Jul 25 2014) on Wed Oct 25 22:23:41 2023
 #
 
 #
@@ -78,7 +78,7 @@ use_getopt:	use_getopt.o $(OBJFILES)
 bracetopia.o:	happyMeasure.h initializingGrid.h moves.h processCommandLines.h supportFuncs.h
 happyMeasure.o:	happyMeasure.h
 initializingGrid.o:	initializingGrid.h supportFuncs.h
-moves.o:	happyMeasure.h
+moves.o:	happyMeasure.h moves.h
 processCommandLines.o:	processCommandLines.h
 supportFuncs.o:	supportFuncs.h
 use_getopt.o:	

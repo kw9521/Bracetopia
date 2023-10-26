@@ -1,7 +1,6 @@
 #ifndef _PROCESS_COMMAND_LINES_H
 #define _PROCESS_COMMAND_LINES_H
 
-
 void printHelpMessage();
 void setDimensionOfGrid(int *dimensionOfGrid, int number);
 void setNumOfPrintCycles(int *numOfPrintOnCycles, int number);
