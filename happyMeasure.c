@@ -1,6 +1,6 @@
 #define _DEFAULT_SOURCE
 
-#include <stdio.h>      // allows for use of printf()
+#include <stdio.h>              // allows for use of printf()
 #include "happyMeasure.h"
 
 /// meaures the happiness of current cell by checking the preference of the neighbors around it 
@@ -103,7 +103,6 @@ float overallHappy(int occupiedCells, int dimensionOfGrid, char initialGrid[][di
             
             // initialGrid[i][j] = 'e';
             char currCellPreference = initialGrid[i][j];
-            printf("%c", initialGrid[i][j]);
             
             // checks if curren cell is a 'e' or a 'n', if not then skips
             if (currCellPreference == '.'){ ;

@@ -1,125 +1,121 @@
 #define _DEFAULT_SOURCE
-#include <stdio.h>      // allows for use of printf()
+#include <stdio.h>              // allows for use of printf()
+#include <stdbool.h> 
+#include <curses.h>
 
 #include "moves.h"
 #include "happyMeasure.h"       // Use measureHappyOfCurrCell() and overallHappy()
 #include "supportFuncs.h"       // use printOutCurrGrid()
 
-void flatten2DArr(int dimensionOfGrid, char source2DArr[][dimensionOfGrid], char flattened1DArr[]){
-    for (int i = 0; i < dimensionOfGrid; i++) {
-        for (int j = 0; j < dimensionOfGrid; j++) {
-            flattened1DArr[i * dimensionOfGrid + j] = source2DArr[i][j]; 
-        }
-    }
-}
-
-/// detects the index of where all the '.' are located inside the 1D array and adds that index into the listOfAllAvaliSpots[]
-/// @param sizeOfFlatGrid size of the grid that contains all of the 'e', 'n' and '.'s; should be dim*dim
-/// @param flattenedGrid grid that contains all of the 'e', 'n' and '.'s
-/// @param vacSpots the number of '.'s in the grid
-/// @param listOfAvaliSpots an array to keep track of the indices where all the '.'s are located
-void findAllVacSpots(int sizeOfFlatGrid, char flattenedGrid[sizeOfFlatGrid], int vacSpots, int listOfAvaliSpots[vacSpots]){
-    int counter = 0;
-    for(int i = 0; i<sizeOfFlatGrid; i++){
-        if (flattenedGrid[i] == '.'){
-            listOfAvaliSpots[counter] = i;
-            counter++;
-        }
-    }
-}
-
-/// From current grid, moves the unhappy agents to the next vacant spot in a top-bottom, left-right sequence
-/// @param movesThisCycle keeps track of how many agents moved in this cycle
-/// @param dimensionOfGrid size of the row/col of 2D array, row = col = dimensionOfGrid 
-/// @param currGrid current grid we are working with
-/// @param vacSpots number of vacant spots ('.') n grid 
-/// @param strengthThreshold threshold for agent to be happy in current spot 
-void movingAgents(int movesThisCycle, int dimensionOfGrid, char currGrid[][dimensionOfGrid], int vacSpots, int strengthThreshold){
-
-    int sizeOfFlatGrid = dimensionOfGrid*dimensionOfGrid; 
-    char flattenedGrid[sizeOfFlatGrid];                   
-    
-    flatten2DArr(dimensionOfGrid, currGrid, flattenedGrid);
-    
-    // keeps track of all the avali spots in 1D array indexing
-    int listOfAvaliSpots[vacSpots];    
-    int currIndexOfAvaliSpots = 0;
-
-    // finding all avali spots
-    findAllVacSpots(sizeOfFlatGrid, flattenedGrid, vacSpots, listOfAvaliSpots); 
-
-    // loops through the 1D array to check curr agent's happiness and updates thir spot
-    for (int i = 0; i < sizeOfFlatGrid; i++) {
-        float currCellHappy;
-
-        // if i is at index 11 and dim = 10, it is basically row 1, 2nd # of 2D array which is [1][1]
-        // if i is at 2, it is at row 0 index 2 of array or the 3rd # inserted into array
-        // if i is at 9, it is at row 0, index 9
-        // if i is 20, it is row 2, col 0 
-        int row = i/(dimensionOfGrid);
-        int col = i%(dimensionOfGrid);   
-
-        char currCellPreference = currGrid[row][col];
-        currCellHappy = measureHappyOfCurrCell(currCellPreference, row, col, dimensionOfGrid, currGrid);
-
-        if(currCellHappy <= strengthThreshold){
-
-            // check if the list of vac spots is exhuasted
-            if (currIndexOfAvaliSpots < vacSpots){
-                
-                // sets curr index to be vac cell
-                flattenedGrid[i] = '.';
-                
-                // sets the  vac spot to be whatever curr cell's pref is
-                flattenedGrid[listOfAvaliSpots[currIndexOfAvaliSpots]] = currCellPreference;
-                currIndexOfAvaliSpots++;
-                movesThisCycle++;
-            } else {
-                // there are no more vac spots left in this grid, must exit loop
-                break;
-            }
+/// checks if curr spot is avali for moving other cells here
+/// @param dimensionOfGrid num of cells in each row/col
+/// @param currGrid 2d array we are dealing with
+/// @param trackCurrCoord  ize 2 array to track the current coordinates
+/// @return true if curr spot is VACANT and other cells can move here
+bool canMoveHere(int dimensionOfGrid, int currGrid[][dimensionOfGrid], int* trackCurrCoord){
+    for (int row = 0; row < dimensionOfGrid; row++) {
+        for (int col = 0; col < dimensionOfGrid; col++) {
             
+            // if grid's curr pos is a 0 = vacant spot and other cells CAN move here
+            if(currGrid[row][col] == 0){ 
+                trackCurrCoord[0] = row; 
+                trackCurrCoord[1] = col;
+                return true;
+            }
         }
-
     }
-
+    return false;
 }
 
-void printOutGridNData(int dimensionOfGrid, char currGrid[][dimensionOfGrid], int movesThisCycle, float overallHappiness, int strengthThreshold, int vacancyRate, int endlinePercentage, int numOfCycles){
-
-    // print out curr grid
+/// @brief Prints the grid and its data 
+/// @param totalOccupiedCells 'e' cells + 'n' cells
+/// @param dimensionOfGrid num of cells in each row/col
+/// @param currGrid 2D array representing the current grid
+/// @param movesThisCycle Number of moves made in the current cycle
+/// @param strengthThreshold minimum bound for a cell to be happy with its current placement
+/// @param vacancyRate percentage of vacant cells (given as an INTEGER out of 100)
+/// @param endlinePercentage percentage of endline cells (given as an INTEGER out of 100)
+/// @param numOfCyclesDone Number of cycles this grid has been through
+void printOutGridNData(int totalOccupiedCells, int dimensionOfGrid, char currGrid[][dimensionOfGrid], int movesThisCycle, int strengthThreshold, int vacancyRate, int endlinePercentage, int numOfCyclesDone){
     printOutCurrGrid(dimensionOfGrid, currGrid);
-
-    printf("cycle: %d\n", numOfCycles);
+    float overallHappiness = overallHappy(totalOccupiedCells, dimensionOfGrid, currGrid);
+    printf("cycle: %d\n", numOfCyclesDone);
     printf("moves this cycle: %d\n", movesThisCycle);
     printf("overall \"happiness\": %0.4f\n", overallHappiness);
-    printf("dim: %d, threshold: %d%%, vacancy: %d%%, endlines: %d%%", dimensionOfGrid, strengthThreshold, vacancyRate, endlinePercentage);
+    printf("dim: %d, threshold: %d%%, vacancy: %d%%, endlines: %d%%\n", dimensionOfGrid, strengthThreshold, vacancyRate, endlinePercentage);
 
 }
 
-// func that main will call
-// calls movingAgents to calculate moving and etc
-// calls printOutGridNData to print out the visual 
-void moveXNumOfTimes(int totalOccupiedCells, int numOfPrintOnCycles, int dimensionOfGrid, char initialGrid[][dimensionOfGrid], int numOfVacCells, int vacancyRate, int endlinePercentage, int strengthThreshold ){
-    int numOfCyclesDone = 0;
-    
-    // print out INITIAL UNCHANGED CYCLE 0 grid
-    if(numOfCyclesDone == 0){
-        float overallHappyness = overallHappy(totalOccupiedCells, dimensionOfGrid, initialGrid);
-        printOutGridNData(dimensionOfGrid, initialGrid, 0, overallHappyness, strengthThreshold, vacancyRate, endlinePercentage, 0);
-        numOfCyclesDone++;
+/// @brief Moves cells based on their happiness
+/// @param totalOccupiedCells 'e' cells + 'n' cells
+/// @param infiniteMode true if we are running infinite mode, false is we are running print mode
+/// @param dimensionOfGrid num of cells in each row/col
+/// @param initialGrid 2D array we are working with
+/// @param numOfPrintOnCycles number of cycles the user WANTS...given in command line by argument -c
+/// @param numOfVacCells number of '.' cells
+/// @param vacancyRate the % of vacant cells (given as an INTEGER out of 100)
+/// @param endlinePercentage the % of endline cells (given as an INTEGER out of 100)
+/// @param strengthThreshold the min bound for cell to be happy w/ curr placement
+/// @param numOfCycles num of cycles this grid has been through
+int moveCells(int totalOccupiedCells, bool infiniteMode, int dimensionOfGrid, char initialGrid[][dimensionOfGrid], int vacancyRate, int endlinePercentage, int strengthThreshold, int numOfCyclesDone){
+    int movesMadeInThisCycle = 0;
+
+    // tracks which cell should move, stay, are empty
+    // 0 = cell is empty,  1 = cell needs to move, 2 = cell dont need to move 
+    int copyofGrid[dimensionOfGrid][dimensionOfGrid];
+    for (int row = 0; row < dimensionOfGrid; row++) { 
+        for (int col = 0; col < dimensionOfGrid; col++) {
+
+            // checks what is at curr cell... either 'e' 'n' or '.'
+            if(initialGrid[row][col] == '.'){ 
+                copyofGrid[row][col] = 0;           // cell is empty and other cells can move here 
+            } else { 
+                char currCellPreference = initialGrid[row][col]; 
+                float currCellHappiness = measureHappyOfCurrCell(currCellPreference, row, col, dimensionOfGrid, initialGrid); // gets its happiness
+                
+                float strThsIntoFloat = (float) strengthThreshold/100;
+                if( currCellHappiness < strThsIntoFloat ){
+                    copyofGrid[row][col] = 1;           // curr cell is NOT happy with its neighbors and NEEDS to move... same as X* an O* in write up
+                } else if (currCellHappiness == strThsIntoFloat){
+                    copyofGrid[row][col] = 2;       
+                }
+                else { 
+                    copyofGrid[row][col] = 2;       // curr cell is the majority and IS HAPPY with its neighbors...DOES NOT need to move
+                }
+            }
+        }
     }
-
-    // prints out the cycles AFTER initial 
-    for (int i = 0; i < numOfPrintOnCycles; i++) {
-        int movesThisCycle = 0; 
-        movingAgents(movesThisCycle, dimensionOfGrid, initialGrid, numOfVacCells, strengthThreshold);
-        
-        float overallHappyness = overallHappy(totalOccupiedCells, dimensionOfGrid, initialGrid);
-        printOutGridNData(dimensionOfGrid, initialGrid, movesThisCycle, overallHappyness, strengthThreshold, vacancyRate, endlinePercentage, numOfCyclesDone);
-        numOfCyclesDone++;
-    }
     
+    for (int i = 0; i < dimensionOfGrid; i++) {
+        for (int j = 0; j < dimensionOfGrid; j++) {
+            
+            int trackCurrCoord[2]; 
+            bool canOrCant = canMoveHere(dimensionOfGrid, copyofGrid, trackCurrCoord);
+            
+            // Is curr cell UUNAPPY?, If 1 then it is unhappy and needs to move
+            if(copyofGrid[i][j] == 1){
+                
+                // Cannot move to this position
+                if (!canOrCant) {
+                    return movesMadeInThisCycle;
+                } else {
+                    // move curr cell to that open cell
+                    initialGrid[trackCurrCoord[0]][trackCurrCoord[1]] = initialGrid[i][j]; 
+                    // changes curr cell location to be empty
+                    initialGrid[i][j] = '.';
 
+                    // changes curr spot to 2 so others cannot move here during this cycle but is still technically vacant 
+                    copyofGrid[i][j] = 2;
+                    // changes that previously vac spot to 2 to make sure next moves CANNOT move there
+                    copyofGrid[trackCurrCoord[0]][trackCurrCoord[1]] = 2;
 
+                    movesMadeInThisCycle++;
+                }
+            }
+        }
+    }
+    if(!infiniteMode){
+        printOutGridNData(totalOccupiedCells, dimensionOfGrid, initialGrid, movesMadeInThisCycle, strengthThreshold, vacancyRate, endlinePercentage, numOfCyclesDone);
+    }
+    return movesMadeInThisCycle;
 }

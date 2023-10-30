@@ -1,8 +1,8 @@
 Assignment Report
 Assignment name:  Bracetopia
 
-My name is:      <<<NAME>>>
-My username is:  <<<ID>>>
+My name is:  KUNLIN WEN
+My username is:  KW9521
 
 [insert your answers after the question and add more lines as needed.]
 
@@ -15,14 +15,14 @@ Does it: put an X inside the [] to characterize your answer
 	[ ] crashes
 	[ ] infinite loops when it should not
 	[ ] works only in 'print' mode
-	[ ] works fine
+	[X] works fine
 	[ ] only implemented these options: [list them below]
 	[ ] other. Explain below.
 
 
 How does your move algorithm work? Describe briefly in English.
 
-
+	
 
 ============= SIMULATION ANALYSIS ==============
 

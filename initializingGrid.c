@@ -3,8 +3,13 @@
 #include <stdlib.h>             // to use srandom(). random()
 #include <time.h>               // to use time()
 #include <stdio.h>              // to use printf()
+#include <stdbool.h> 
 #include "initializingGrid.h"
+#include "moves.h"
 
+/// @brief shuffles an array using the Fisher-Yates algo
+/// @param flattenedGrid array to be shuffled
+/// @param lengthOfFlattenedGrid length of array
 void fisherYatesShuffle(char *flattenedGrid, int lengthOfFlattenedGrid) {
     for (int i = 0; i <= lengthOfFlattenedGrid - 2; i++) {
         int j = i + (random() % (lengthOfFlattenedGrid - i));
@@ -16,17 +21,32 @@ void fisherYatesShuffle(char *flattenedGrid, int lengthOfFlattenedGrid) {
     }
 }
 
+/// @brief Calculates the number of vacant cells based on the total number of cells and vacancy rate
+/// @param totalNumOfCells The total number of cells.
+/// @param vacancyRate The vacancy rate as an integer out of 100.
+/// @return The number of vacant cell
 int calcNumOfVacCells(int totalNumOfCells, int vacancyRate ){
     int numOfVacancy = (int)(totalNumOfCells * ((float)vacancyRate/100));              // truncates 
     return numOfVacancy;
 }
 
+/// @brief Calculates the number of endline cells based on the total number of cells and endline percentage
+/// @param totalNumOfCells The total number of cells.
+/// @param vacancyRate The vacancy rate as an integer out of 100.
+/// @return The number of endline cell
 int calcNumOfEndlines(int totalNumOfCells, int endlinePercentage){
     int numOfEndlines = (int)(totalNumOfCells * ((float)endlinePercentage/100));       // truncates 
     return numOfEndlines;
 }
 
-void makeGrid(int dimensionOfGrid, char initialGrid[][dimensionOfGrid], int vacancyRate, int endlinePercentage) {
+/// @brief Creates the initial grid with a specified vacancy rate and endline percentage
+/// @param strengthThreshold the min bound for cell to be happy w/ curr placement
+/// @param totalOccupiedCells 'e' cells + 'n' cells
+/// @param dimensionOfGrid num of cells in each row/col
+/// @param initialGrid 2D array we are working with
+/// @param vacancyRate the % of vacant cells (given as an INTEGER out of 100)
+/// @param endlinePercentage the % of endline cells (given as an INTEGER out of 100)
+void makeGrid(int strengthThreshold, int totalOccupiedCells, int dimensionOfGrid, char initialGrid[][dimensionOfGrid], int vacancyRate, int endlinePercentage) {
     
     // shuffling method
     int numOfCells = dimensionOfGrid * dimensionOfGrid;
@@ -63,16 +83,6 @@ void makeGrid(int dimensionOfGrid, char initialGrid[][dimensionOfGrid], int vaca
     // Seed the random number generator
     srandom(41);
 
-    // testing, print flattenedgrid PRESHUFFLED
-    for(int i = 0; i < lengthOfFlattenedGrid; i++){
-        printf("%c ", flattenedGrid[i]);
-    }
-    printf("\nNum of Cells: %d\n", numOfCells);
-    printf("Num of Vacancy: %d\n", numOfVacancy);
-    printf("Num of EndLines: %d\n", numOfEndlines);
-
-
-
     // Shuffle the flatArray using Fisher-Yates shuffle
     fisherYatesShuffle(flattenedGrid, lengthOfFlattenedGrid);
 
@@ -82,6 +92,8 @@ void makeGrid(int dimensionOfGrid, char initialGrid[][dimensionOfGrid], int vaca
             initialGrid[i][j] = flattenedGrid[i * dimensionOfGrid + j];
         }
     }
+
+    printOutGridNData(totalOccupiedCells, dimensionOfGrid, initialGrid, 0, strengthThreshold, vacancyRate, endlinePercentage, 0);
 
 }
 
