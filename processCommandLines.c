@@ -1,3 +1,6 @@
+/// @file processCommandLines.c
+/// @author KUNLIN WEN, KW9521
+/// All functions related to processing command line arguments
 #define _DEFAULT_SOURCE
 #include <stdlib.h>         // to use EXIT_FAILURE
 #include <stdio.h>          // to use stderr
@@ -67,7 +70,6 @@ void setStrengthThreshold(int *strengthThreshold, int number){
 /// The program interprets this value as the percentage of the entire space that is to be vacant, with all other cells occupied by agents. 
 /// Valid vacancy rates are [1..99]; the default is 20. 
 /// An invalid vacancy rate is an error.
-
 /// For example, a vacancy rate of 10 means that the percentage of vacant locations is 10%. For a 10x10 grid, this means 10 cells will be vacant and 90 will contain agents. 
 /// For grid dimensions that are not evenly divisible by the percentage of vacancy, use the truncated value for the number of vacant locations. 
 /// If the grid dimension is 5x5, and the vacancy rate is 10%, then the number of vacant locations would be 25/10 (or (int) (25 * 0.10)) which is 2.

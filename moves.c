@@ -1,3 +1,6 @@
+/// @file moves.c
+/// @author KUNLIN WEN, KW9521
+/// All functions related moving cells around 
 #define _DEFAULT_SOURCE
 #include <stdio.h>              // allows for use of printf()
 #include <stdbool.h> 

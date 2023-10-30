@@ -22,34 +22,44 @@ Does it: put an X inside the [] to characterize your answer
 
 How does your move algorithm work? Describe briefly in English.
 
-	
+	1. Goes thru entire 2D array
+	2. Makes an int array to keep track of which cells CAN and CANT be moved using 0,1,2 based on their happiness calcualtion
+	(tried using * like the write up but didn't work really well so I changed it to 0,1,2)
+	3. If cell is a 1, it CAN be moved and will be moved to the next avaliable empty spot (denoted by 0 in that int array)
+	4. Swaps spots 
+	3b. If cell is a 1 and no spot is left, it returns the # of moves made so far
+	5. Check if current command line argument is in PRINT mode or not
+	5a. If in print mode, prints out data regularly
+	5b. Otherwise just returns the # of moves made in current cycle
 
 ============= SIMULATION ANALYSIS ==============
 
 What did you find most revealing about the simulation?
 
-
+	That the write up results are not accurate.
 
 
 ============= GENERAL PROJECT FEEDBACK ==============
 
 What did I learn?
 
-
+	That I should name my variables better, try not to have functions that ask for so many parameters. 
 
 What was easy about this assignment?
 
-
+	Literally nothing
 
 What gave you problems or troubles?
 
-
+	Literally everything
 
 What should the instructor do to improve this assignment?
 
-
+	Update the expect results so we can test our code instead of us just guessing if our results are right or not. 
+	Instructors should also clarify how they wanted us to calculate certain stuff like happiness, # of vacs, # of endlines, etc
 
 What would you have liked to do in this assignment?
 
+	I have no opinion on this.
 
 

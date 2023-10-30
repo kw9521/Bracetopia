@@ -1,10 +1,13 @@
-#define _DEFAULT_SOURCE
+/// @file supportFuncs.c
+/// @author KUNLIN WEN, KW9521
+/// Functions that will be called several times throughout this project
 
+#define _DEFAULT_SOURCE
 #include <stdio.h>      // allows for use of printf()
 #include <curses.h>
 #include "supportFuncs.h"
 
-/// prints out current grid, given a 2D array
+/// @brief prints out current grid, given a 2D array
 /// @param dimensionOfGrid num of cells in each row/col
 /// @param initialGrid 2d array we are dealing with
 void printOutCurrGrid(int dimensionOfGrid, char initialGrid[][dimensionOfGrid]){

@@ -1,3 +1,6 @@
+/// @file happyMeasure.c
+/// @author KUNLIN WEN, KW9521
+/// All functions related to calcualting happiness 
 #define _DEFAULT_SOURCE
 
 #include <stdio.h>              // allows for use of printf()

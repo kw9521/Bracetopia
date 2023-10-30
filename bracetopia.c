@@ -2,7 +2,6 @@
 /// @author KUNLIN WEN, KW9521
 /// The file containing main() function must be named bracetopia.c
 
-
 #define _DEFAULT_SOURCE        
 #include <unistd.h>             // to use usleep()
 #include <stdlib.h>             // to use srandom() and random()

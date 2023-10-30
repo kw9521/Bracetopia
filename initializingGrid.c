@@ -1,3 +1,6 @@
+/// @file initializingGrid.c
+/// @author KUNLIN WEN, KW9521
+/// All functions related to initializin grid
 #define _DEFAULT_SOURCE
 
 #include <stdlib.h>             // to use srandom(). random()
